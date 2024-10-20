@@ -11,7 +11,7 @@ const Collection = () => {
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState('relavent')
 
-  const { products } = useContext(ShopContext);
+  const { products, search, showSearch } = useContext(ShopContext);
 
   const toggleCategory = (e) => {
     if (category.includes(e.target.value)) {
@@ -46,6 +46,10 @@ const Collection = () => {
       );
     }
 
+    if(showSearch && search){
+      productCopy = productCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
+    }
+
     setFilterProducts(productCopy); // Update the filtered products state
   };
 
@@ -68,7 +72,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   useEffect(()=>{
     sortProducts();
