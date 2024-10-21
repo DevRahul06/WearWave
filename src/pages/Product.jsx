@@ -6,7 +6,7 @@ import RelatedProducts from "../components/RelatedProducts";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopContext);
+  const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
@@ -84,7 +84,10 @@ const Product = () => {
             </div>
           </div>
 
-          <button className="bg-black text-white px-8 py-3 text-sm active:bg-gray-600">
+          <button
+            onClick={() => addToCart(productData._id, size)}
+            className="bg-black text-white px-8 py-3 text-sm active:bg-gray-600"
+          >
             Add To Cart
           </button>
           <hr className="mt-8 sm:w-4/5" />
@@ -104,19 +107,27 @@ const Product = () => {
           <p className="border px-5 py-3 text-sm">Reviews (122)</p>
         </div>
         <div className="flex flex-col gap-4 border p-6 mt-2 text-sm text-gray-500">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti eveniet reprehenderit voluptatem nulla beatae molestias iste, aliquid distinctio quasi, numquam consequuntur assumenda aperiam consequatur quidem dicta unde praesentium? Facere, pariatur?</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus sequi, eveniet molestias cum necessitatibus in ab sint, soluta voluptatibus odio fugit qui voluptatum, animi suscipit cupiditate mollitia tenetur odit ipsa?</p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
+            eveniet reprehenderit voluptatem nulla beatae molestias iste,
+            aliquid distinctio quasi, numquam consequuntur assumenda aperiam
+            consequatur quidem dicta unde praesentium? Facere, pariatur?
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus
+            sequi, eveniet molestias cum necessitatibus in ab sint, soluta
+            voluptatibus odio fugit qui voluptatum, animi suscipit cupiditate
+            mollitia tenetur odit ipsa?
+          </p>
         </div>
       </div>
 
       {/* display Related Products */}
 
-      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
-
-
-
-
-
+      <RelatedProducts
+        category={productData.category}
+        subCategory={productData.subCategory}
+      />
     </div>
   ) : (
     <div className="opacity-0"></div>
