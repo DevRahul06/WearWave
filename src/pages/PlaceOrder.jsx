@@ -62,34 +62,49 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee
+        amount: getCartAmount() + delivery_fee,
       };
 
       switch (method) {
         // API call fro COD
         case "cod":
+          const res = await axios.post(
+            backendURL + "/api/order/place",
+            orderData,
+            { headers: { token } }
+          );
 
-        const res = await axios.post(backendURL + "/api/order/place",orderData,{headers:{token}})
-        
-        if(res.data.success){
-          setCartItem({})
-          navigate("/orders")
-        } else{
-          toast.error(res.data.message)
-        }
-          
+          if (res.data.success) {
+            setCartItem({});
+            navigate("/orders");
+          } else {
+            toast.error(res.data.message);
+          }
+
           break;
-      
+
+        case "stripe":
+          const resStripe = await axios.post(
+            backendURL + "/api/order/stripe",
+            orderData,
+            { headers: { token } }
+          );
+
+          if (resStripe.data.success) {
+            const { session_url } = resStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(resStripe.data.message);
+          }
+
+          break;
+
         default:
           break;
       }
-
-
-
     } catch (error) {
       console.log(error);
-      toast.error(error.message)
-      
+      toast.error(error.message);
     }
   };
 
@@ -215,17 +230,6 @@ const PlaceOrder = () => {
                 }`}
               ></p>
               <img src={assets.stripe_logo} className="h-5 mx-4" alt="" />
-            </div>
-            <div
-              onClick={() => setMethod("razorpay")}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
-            >
-              <p
-                className={`min-w-3.5 h-3.5 border rounded-full ${
-                  method === "razorpay" ? "bg-green-400" : ""
-                }`}
-              ></p>
-              <img src={assets.razorpay_logo} className="h-5 mx-4" alt="" />
             </div>
             <div
               onClick={() => setMethod("cod")}
